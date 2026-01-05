@@ -1,0 +1,25 @@
+# Application configuration in YAML format
+spring:
+  application:
+    name: sotium-back
+
+  # DataSource configuration using environment variables (no secrets in VCS)
+  datasource:
+    url: ${PG_DB_URL}
+    username: ${PG_DB_USERNAME}
+    password: ${PG_DB_PASSWORD}
+
+    # Connection pool (Hikari) sensible defaults; tune via env if needed
+    # hikari:
+    #   maximum-pool-size: ${PG_DB_POOL_MAX:10}
+    #   minimum-idle: ${PG_DB_POOL_MIN_IDLE:2}
+    #   idle-timeout: ${PG_DB_POOL_IDLE_MS:600000}
+    #   max-lifetime: ${PG_DB_POOL_MAX_LIFE_MS:1800000}
+
+  # Recommended JPA settings (safe defaults)
+  jpa:
+    # Avoid schema auto-creation in production. For local dev, you may temporarily use 'update'.
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    show-sql: false
