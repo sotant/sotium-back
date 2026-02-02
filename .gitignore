@@ -11,7 +11,6 @@ target/
 
 ### Java ###
 *.class
-*.log
 *.ctxt
 hs_err_pid*
 replay_pid*
@@ -49,7 +48,6 @@ Desktop.ini
 *.iws
 *.iml
 *.ipr
-out/
 
 ### NetBeans ###
 /nbproject/private/

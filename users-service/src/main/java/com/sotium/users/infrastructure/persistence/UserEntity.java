@@ -1,22 +1,23 @@
-package com.sotium.users.model;
+package com.sotium.users.infrastructure.persistence;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import org.hibernate.annotations.Check;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(name = "uk_users_email", columnNames = {"email"})
 })
-@Check(constraints = "email LIKE '%@%'")
-public class User {
+public class UserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // SERIAL PRIMARY KEY
+    private Long id;
 
     @Column(nullable = false, unique = true, length = 255)
+    @Pattern(regexp = ".+@.+", message = "Email must contain @")
     private String email;
 
     @Column(name = "password_hash", nullable = false, columnDefinition = "TEXT")
@@ -46,6 +47,8 @@ public class User {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    // Getters and setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
