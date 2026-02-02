@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: sotium-back
+  profiles:
+    active: dev
+
+server:
+  port: 8080
