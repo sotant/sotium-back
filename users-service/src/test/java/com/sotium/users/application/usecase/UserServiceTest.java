@@ -1,6 +1,6 @@
 package com.sotium.users.application.usecase;
 
-import com.sotium.users.application.port.output.PasswordEncoder;
+import com.sotium.users.application.port.out.PasswordEncoder;
 import com.sotium.users.domain.model.User;
 import com.sotium.users.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.sotium.users.infrastructure.security;
 
-import com.sotium.users.application.port.output.PasswordEncoder;
+import com.sotium.users.application.port.out.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
