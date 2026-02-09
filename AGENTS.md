@@ -1,4 +1,3 @@
-GPT CODEX
 # AGENTS.md
 
 > Este archivo define **cómo deben comportarse los agentes**, **qué decisiones pueden tomar** y **qué reglas arquitectónicas son innegociables**.
