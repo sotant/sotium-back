@@ -18,8 +18,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Configures Keycloak JWT validation and request tenant filters for the resource server.
@@ -43,7 +43,7 @@ public class ResourceServerConfig {
             .oauth2ResourceServer(resourceServer -> resourceServer
                 .jwt(jwtConfigurer -> jwtConfigurer.jwtAuthenticationConverter(new KeycloakRealmRoleJwtAuthenticationConverter()))
             )
-            .addFilterAfter(tenantResolutionFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAfter(tenantResolutionFilter, BearerTokenAuthenticationFilter.class)
             .addFilterAfter(tenantEnforcementFilter, TenantResolutionFilter.class)
             .exceptionHandling(Customizer.withDefaults());
 
