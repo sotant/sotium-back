@@ -48,7 +48,7 @@
             </dependency>
             <dependency>
                 <groupId>com.sotium</groupId>
-                <artifactId>users-service</artifactId>
+                <artifactId>identity</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
