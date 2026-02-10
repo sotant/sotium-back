@@ -1,0 +1,4 @@
+# Application configuration in YAML format
+spring:
+  application:
+    name: identity
