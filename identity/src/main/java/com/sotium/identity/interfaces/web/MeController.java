@@ -24,7 +24,7 @@ public class MeController {
         final AuthenticatedUser user = securityContextFacade.getRequiredAuthenticatedUser();
         final UUID academyId = tenantContextHolder.get().map(context -> context.academyId()).orElse(null);
 
-        if (!user.authorities().contains("ROLE_ADMIN") && academyId == null) {
+        if (!user.isAdmin() && academyId == null) {
             throw new ForbiddenException("Tenant context is required");
         }
 

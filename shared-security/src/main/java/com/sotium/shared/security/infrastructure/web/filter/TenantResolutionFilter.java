@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -24,8 +23,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class TenantResolutionFilter extends OncePerRequestFilter {
-
-    private static final Set<String> TENANT_SCOPED_ROLES = Set.of("ROLE_OWNER", "ROLE_TEACHER", "ROLE_STUDENT");
 
     private final SecurityContextFacade securityContextFacade;
     private final TenantSelection tenantSelection;
@@ -40,8 +37,7 @@ public class TenantResolutionFilter extends OncePerRequestFilter {
     ) throws ServletException, IOException {
         try {
             final AuthenticatedUser authenticatedUser = securityContextFacade.getRequiredAuthenticatedUser();
-            final boolean requiresTenant = authenticatedUser.authorities().stream().anyMatch(TENANT_SCOPED_ROLES::contains);
-            if (requiresTenant) {
+            if (authenticatedUser.requiresTenant()) {
                 final UUID selectedAcademyId = tenantSelection.resolveActiveAcademyId(request).orElse(null);
                 final UUID academyId = tenantAccessPort.resolveAcademyId(authenticatedUser, selectedAcademyId);
                 tenantContextHolder.set(new TenantContext(academyId));
