@@ -28,9 +28,7 @@ public class TenantEnforcementFilter extends OncePerRequestFilter {
         final FilterChain filterChain
     ) throws ServletException, IOException {
         final var authenticatedUser = securityContextFacade.getRequiredAuthenticatedUser();
-        final boolean isAdmin = authenticatedUser.authorities().contains("ROLE_ADMIN");
-
-        if (!isAdmin && tenantContextHolder.get().isEmpty()) {
+        if (!authenticatedUser.isAdmin() && tenantContextHolder.get().isEmpty()) {
             log.warn("Tenant context missing for subject={} path={}", authenticatedUser.sub(), request.getRequestURI());
             throw new ForbiddenException("Tenant context is required for this request");
         }
