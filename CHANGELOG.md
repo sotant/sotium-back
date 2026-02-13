@@ -8,6 +8,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Se añadieron pruebas unitarias para `Role` y `AuthenticatedUser` en `shared-security`, cubriendo tenant scope, authorities, normalización de realm roles e inmutabilidad de colecciones.
+- Se amplió la cobertura de `ResolveTenantContextService` y se añadieron pruebas para `TenantAccessPortAdapter` en `identity`, validando happy paths y traducción de excepciones de acceso a tenant.
 - Se añadió diagrama de flujo happy path de `GET /api/identity/me` y trazado narrado en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
 - Documentación técnica detallada de arquitectura hexagonal y seguridad para módulos `identity` y `shared-security` en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
 - Integración base de OAuth2 Resource Server en `shared-security` con validación de issuer, JWKS y audience para Keycloak.
