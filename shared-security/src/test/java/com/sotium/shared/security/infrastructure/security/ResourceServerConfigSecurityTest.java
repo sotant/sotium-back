@@ -1,7 +1,5 @@
 package com.sotium.shared.security.infrastructure.security;
 
-import com.sotium.identity.interfaces.web.MeController;
-import com.sotium.identity.interfaces.web.PublicIdentityController;
 import com.sotium.shared.security.application.port.out.TenantAccessPort;
 import com.sotium.shared.security.infrastructure.security.exceptions.ForbiddenException;
 import com.sotium.shared.security.infrastructure.web.filter.TenantContextHolder;
@@ -12,13 +10,18 @@ import com.sotium.shared.security.interfaces.rest.GlobalExceptionHandler;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,8 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
     },
     classes = {
         ResourceServerConfig.class,
-        MeController.class,
-        PublicIdentityController.class,
+        ResourceServerConfigSecurityTest.TestController.class,
         GlobalExceptionHandler.class,
         ResourceServerConfigSecurityTest.SecurityTestBeans.class
     }
@@ -43,6 +45,20 @@ class ResourceServerConfigSecurityTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @RestController
+    static class TestController {
+
+        @GetMapping("/api/identity/me")
+        public ResponseEntity<Map<String, String>> me() {
+            return ResponseEntity.ok(Map.of("status", "ok"));
+        }
+
+        @GetMapping("/api/public/identity/academy-registration")
+        public ResponseEntity<Map<String, String>> academyRegistration() {
+            return ResponseEntity.ok(Map.of("status", "registration endpoint available"));
+        }
+    }
 
     @Test
     @DisplayName("resourceServerConfig_shouldRequireAuthenticationForNonPublicEndpoints")

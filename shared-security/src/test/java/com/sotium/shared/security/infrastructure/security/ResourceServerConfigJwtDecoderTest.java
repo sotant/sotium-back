@@ -12,8 +12,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ResourceServerConfigJwtDecoderTest {
 
@@ -37,7 +36,7 @@ class ResourceServerConfigJwtDecoderTest {
 
         final OAuth2TokenValidatorResult validation = validator.validate(tokenWithoutAudience);
 
-        assertFalse(validation.isSuccess());
+        assertTrue(validation.hasErrors());
         assertEquals("invalid_token", validation.getErrors().iterator().next().getErrorCode());
     }
 
