@@ -8,6 +8,7 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Se agregaron tests de integración (`@SpringBootTest` + Testcontainers PostgreSQL) para flujo e2e de `/api/identity/me`, endpoint público, repositorios JPA y adapters de persistencia de `identity`.
 - Se agregaron tests de seguridad para converter JWT, `SecurityContextFacade`, filtros de tenant (`resolution`/`enforcement`), `TenantSelection` y reglas de acceso público/protegido en `ResourceServerConfig`.
 - Se añadieron tests web/slice con `@WebMvcTest` para `MeController`, `PublicIdentityController` y `GlobalExceptionHandler`, cubriendo respuestas 200/403/401/400 y payloads JSON esperados.
 - Se añadieron pruebas unitarias para `Role` y `AuthenticatedUser` en `shared-security`, cubriendo tenant scope, authorities, normalización de realm roles e inmutabilidad de colecciones.
