@@ -1,6 +1,7 @@
 package com.sotium.identity.interfaces.web;
 
 import com.sotium.shared.security.domain.model.AuthenticatedUser;
+import com.sotium.shared.security.domain.model.TenantContext;
 import com.sotium.shared.security.infrastructure.security.SecurityContextFacade;
 import com.sotium.shared.security.infrastructure.security.exceptions.ForbiddenException;
 import com.sotium.shared.security.infrastructure.web.filter.TenantContextHolder;
@@ -22,7 +23,7 @@ public class MeController {
     @GetMapping
     public MeResponse me() {
         final AuthenticatedUser user = securityContextFacade.getRequiredAuthenticatedUser();
-        final UUID academyId = tenantContextHolder.get().map(context -> context.academyId()).orElse(null);
+        final UUID academyId = tenantContextHolder.get().map(TenantContext::academyId).orElse(null);
 
         if (!user.isAdmin() && academyId == null) {
             throw new ForbiddenException("Tenant context is required");
