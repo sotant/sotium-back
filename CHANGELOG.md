@@ -8,6 +8,12 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Se añadieron tests de arquitectura con ArchUnit para validar reglas de capas (domain/application/infrastructure), puertos/adapters, aislamiento de controllers, filtros de `shared-security` y límites de excepciones entre bounded contexts.
+- Se agregaron tests de integración (`@SpringBootTest` + Testcontainers PostgreSQL) para flujo e2e de `/api/identity/me`, endpoint público, repositorios JPA y adapters de persistencia de `identity`.
+- Se agregaron tests de seguridad para converter JWT, `SecurityContextFacade`, filtros de tenant (`resolution`/`enforcement`), `TenantSelection` y reglas de acceso público/protegido en `ResourceServerConfig`.
+- Se añadieron tests web/slice con `@WebMvcTest` para `MeController`, `PublicIdentityController` y `GlobalExceptionHandler`, cubriendo respuestas 200/403/401/400 y payloads JSON esperados.
+- Se añadieron pruebas unitarias para `Role` y `AuthenticatedUser` en `shared-security`, cubriendo tenant scope, authorities, normalización de realm roles e inmutabilidad de colecciones.
+- Se amplió la cobertura de `ResolveTenantContextService` y se añadieron pruebas para `TenantAccessPortAdapter` en `identity`, validando happy paths y traducción de excepciones de acceso a tenant.
 - Se añadió diagrama de flujo happy path de `GET /api/identity/me` y trazado narrado en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
 - Documentación técnica detallada de arquitectura hexagonal y seguridad para módulos `identity` y `shared-security` en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
 - Integración base de OAuth2 Resource Server en `shared-security` con validación de issuer, JWKS y audience para Keycloak.
