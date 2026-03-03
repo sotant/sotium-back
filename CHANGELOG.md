@@ -1,34 +1,49 @@
 # Changelog
 
-Todos los cambios notables de este proyecto se documentan en este archivo.
-
-El formato se basa en [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/)
-y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
+Todos los cambios de este proyecto se documentarán en este archivo siguiendo el formato de [Keep a Changelog](https://keepachangelog.com/es-ES/1.1.0/).
+Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
-### Added
-- Se añadieron tests de arquitectura con ArchUnit para validar reglas de capas (domain/application/infrastructure), puertos/adapters, aislamiento de controllers, filtros de `shared-security` y límites de excepciones entre bounded contexts.
-- Se agregaron tests de integración (`@SpringBootTest` + Testcontainers PostgreSQL) para flujo e2e de `/api/identity/me`, endpoint público, repositorios JPA y adapters de persistencia de `identity`.
-- Se agregaron tests de seguridad para converter JWT, `SecurityContextFacade`, filtros de tenant (`resolution`/`enforcement`), `TenantSelection` y reglas de acceso público/protegido en `ResourceServerConfig`.
-- Se añadieron tests web/slice con `@WebMvcTest` para `MeController`, `PublicIdentityController` y `GlobalExceptionHandler`, cubriendo respuestas 200/403/401/400 y payloads JSON esperados.
-- Se añadieron pruebas unitarias para `Role` y `AuthenticatedUser` en `shared-security`, cubriendo tenant scope, authorities, normalización de realm roles e inmutabilidad de colecciones.
-- Se amplió la cobertura de `ResolveTenantContextService` y se añadieron pruebas para `TenantAccessPortAdapter` en `identity`, validando happy paths y traducción de excepciones de acceso a tenant.
-- Se añadió diagrama de flujo happy path de `GET /api/identity/me` y trazado narrado en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
-- Documentación técnica detallada de arquitectura hexagonal y seguridad para módulos `identity` y `shared-security` en `docs/IDENTITY_SHARED-SECURITY_ARQUITECTURA_HEXAGONAL.md`.
-- Integración base de OAuth2 Resource Server en `shared-security` con validación de issuer, JWKS y audience para Keycloak.
-- Conversión de roles realm de Keycloak a authorities de Spring Security filtrando roles técnicos.
-- Contexto de tenant por request (`TenantContextHolder`) y filtros de resolución/enforcement.
-- Puerto `TenantAccessPort` e implementación en `identity` para validación strict de usuario provisionado y membership activa.
-- Endpoints de smoke test (`/api/public/identity/academy-registration` y `/api/identity/me`) para pruebas de autenticación/autorización.
-- Guía operativa de integración y escenarios Postman en `docs/keycloak-resource-server-integration.md`.
+## [0.1.0] - 2026-03-03
 
-### Changed
-- Refactor de roles de seguridad a dominio (`Role` y `AuthenticatedUser`) eliminando strings hardcoded de roles en filtros de tenant y converter JWT.
-- Se incorporó Lombok en `identity` y `shared-security` para reducir boilerplate (constructores, getters de entidades y logging).
-- Se simplificaron JavaDocs dejando solo documentación en clases/métodos donde aporta contexto real.
-- Se añadieron logs de seguridad/tenant sin exponer datos sensibles para trazabilidad del flujo.
-- Refactor de paquetes en `identity` y `shared-security` para alinear la estructura a domain/application/infrastructure/interfaces según arquitectura hexagonal + clean.
-- Se añadieron JavaDoc en inglés para clases y métodos nuevos de seguridad, tenant e identity.
-- Eliminada la configuración duplicada `bootstrap/src/main/java/com/sotium/bootstrap/config/SecurityConfig.java` para usar solo `ResourceServerConfig`.
-- `bootstrap/src/main/resources/application.yml` mantiene `server.port=8080` y datasource sin valores por defecto.
+### Added
+- Estructura de **monolito modular Maven** con módulos `shared`, `shared-security`, `identity` y `bootstrap`, bajo Java 21 y Spring Boot 4.0.2.
+- Módulo `bootstrap` como punto de entrada de la aplicación (`SotiumApplication`) y configuración transversal inicial para transacciones (`TransactionConfig`) y mensajería (`MessagingConfig`).
+- Configuración base de aplicación en `bootstrap/src/main/resources/application.yml` con puerto HTTP y propiedades para datasource y seguridad OAuth2 Resource Server.
+- Módulo `shared` con excepciones de dominio reutilizables (`NotFoundException`, `ConflictException`) y manejador global de excepciones web (`GlobalExceptionHandler`).
+- Módulo `shared-security` implementado con enfoque hexagonal:
+    - Modelos de dominio de seguridad (`Role`, `AuthenticatedUser`, `TenantContext`).
+    - Puerto de salida `TenantAccessPort` para desacoplar validación de pertenencia/tenancy.
+    - Configuración de Resource Server (`ResourceServerConfig`) con soporte JWT.
+    - Conversor de claims/roles de Keycloak (`KeycloakRealmRoleJwtAuthenticationConverter`) y utilidades de contexto (`SecurityContextFacade`, `JwtClaimsExtractor`).
+    - Filtros web para resolución y enforcement de tenant (`TenantResolutionFilter`, `TenantEnforcementFilter`) y utilidades de selección/contexto (`TenantSelection`, `TenantContextHolder`).
+- Módulo `identity` implementado con enfoque hexagonal:
+    - Dominio de identidad y membresía (`IdentityUser`, `AcademyMembership`) con enums de estado/rol (`IdentityUserStatus`, `MembershipStatus`, `MembershipRole`).
+    - Caso de uso `ResolveTenantContextService` y puerto de entrada `ResolveTenantContextUseCase` para resolver contexto tenant por request.
+    - Puertos de salida para persistencia (`IdentityUserRepository`, `MembershipRepository`).
+    - Adaptadores de infraestructura para JPA (`IdentityUserRepositoryAdapter`, `MembershipRepositoryAdapter`) con repositorios Spring Data y mapeadores de persistencia.
+    - Entidades JPA específicas del módulo (`JpaIdentityUserEntity`, `JpaMembershipEntity`).
+    - Adaptador `TenantAccessPortAdapter` para integrar validación de tenant entre `shared-security` e `identity`.
+    - Endpoints REST iniciales: endpoint público de smoke test (`/api/public/identity/academy-registration`) y endpoint autenticado de perfil/contexto (`/api/identity/me`) con DTO `MeResponse`.
+- Pruebas automatizadas iniciales:
+    - Tests unitarios de dominio en `shared-security` (`RoleTest`, `AuthenticatedUserTest`).
+    - Tests unitarios/aislados de filtros de tenant y utilidades de seguridad.
+    - Tests de configuración de seguridad y JWT en Resource Server.
+    - Tests web con `@WebMvcTest` para controladores de `identity` y handlers de excepciones.
+    - Tests de aplicación para `ResolveTenantContextService`.
+    - Test de arquitectura (`HexagonalArchitectureTest`) para validar reglas de capas y límites.
+    - Test de integración extremo a extremo (`IdentitySecurityIntegrationTest`) para el flujo autenticado de identidad + seguridad.
+- Documentación funcional/técnica existente:
+    - Guía operativa de integración Keycloak Resource Server y escenarios de prueba (`docs/keycloak-resource-server-integration.md`).
+    - ADR aceptado sobre uso acotado de anotaciones Spring en capa Application (`docs/ADR_spring_in_application_layer.md`).
+    - Script SQL de arquitectura inicial de base de datos (`docs/V1__initial_architecture.sql`) con diseño modular por dominios funcionales.
+
+### Security
+- Se estableció autenticación JWT con validación de issuer, JWKS y audience para proteger endpoints privados.
+- Se formalizó el modelo de autorización por roles de realm y alcance por tenant para endpoints sensibles.
+- Se implementó la estrategia strict de acceso: token válido sin usuario/membership activa en persistencia deriva en denegación de acceso.
+
+### Architecture
+- Se consolidó arquitectura hexagonal/clean por módulos, con separación explícita entre dominio, aplicación, infraestructura e interfaces.
+- Se incorporó validación automatizada de reglas arquitectónicas para prevenir dependencias ilegales entre capas y bounded contexts.
