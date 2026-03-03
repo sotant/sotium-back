@@ -8,14 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Disabled("It doesn't work")
 @WebMvcTest(controllers = GlobalExceptionHandlerWebMvcTest.ThrowingController.class)
@@ -27,36 +27,39 @@ class GlobalExceptionHandlerWebMvcTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("globalExceptionHandler_shouldMapForbiddenExceptionTo403ApiError")
-    void globalExceptionHandler_shouldMapForbiddenExceptionTo403ApiError() throws Exception {
+    @DisplayName("globalExceptionHandler_shouldMapForbiddenExceptionTo403ProblemDetail")
+    void globalExceptionHandler_shouldMapForbiddenExceptionTo403ProblemDetail() throws Exception {
         mockMvc.perform(get("/test/forbidden"))
-            .andExpect(status().isForbidden())
-            .andExpect(jsonPath("$.status").value(403))
-            .andExpect(jsonPath("$.error").value("Forbidden"))
-            .andExpect(jsonPath("$.message").value("forbidden message"))
-            .andExpect(jsonPath("$.path").value("/test/forbidden"));
+                .andExpect(status().isForbidden())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(403))
+                .andExpect(jsonPath("$.title").value("Forbidden"))
+                .andExpect(jsonPath("$.detail").value("forbidden message"))
+                .andExpect(jsonPath("$.instance").value("/test/forbidden"));
     }
 
     @Test
-    @DisplayName("globalExceptionHandler_shouldMapAuthenticationExceptionTo401ApiError")
-    void globalExceptionHandler_shouldMapAuthenticationExceptionTo401ApiError() throws Exception {
+    @DisplayName("globalExceptionHandler_shouldMapAuthenticationExceptionTo401ProblemDetail")
+    void globalExceptionHandler_shouldMapAuthenticationExceptionTo401ProblemDetail() throws Exception {
         mockMvc.perform(get("/test/unauthorized"))
-            .andExpect(status().isUnauthorized())
-            .andExpect(jsonPath("$.status").value(401))
-            .andExpect(jsonPath("$.error").value("Unauthorized"))
-            .andExpect(jsonPath("$.message").value("unauthorized message"))
-            .andExpect(jsonPath("$.path").value("/test/unauthorized"));
+                .andExpect(status().isUnauthorized())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.title").value("Unauthorized"))
+                .andExpect(jsonPath("$.detail").value("unauthorized message"))
+                .andExpect(jsonPath("$.instance").value("/test/unauthorized"));
     }
 
     @Test
-    @DisplayName("globalExceptionHandler_shouldMapIllegalArgumentTo400ApiError")
-    void globalExceptionHandler_shouldMapIllegalArgumentTo400ApiError() throws Exception {
+    @DisplayName("globalExceptionHandler_shouldMapIllegalArgumentTo400ProblemDetail")
+    void globalExceptionHandler_shouldMapIllegalArgumentTo400ProblemDetail() throws Exception {
         mockMvc.perform(get("/test/bad-request"))
-            .andExpect(status().isBadRequest())
-            .andExpect(jsonPath("$.status").value(400))
-            .andExpect(jsonPath("$.error").value("Bad Request"))
-            .andExpect(jsonPath("$.message").value("bad request message"))
-            .andExpect(jsonPath("$.path").value("/test/bad-request"));
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.title").value("Bad Request"))
+                .andExpect(jsonPath("$.detail").value("bad request message"))
+                .andExpect(jsonPath("$.instance").value("/test/bad-request"));
     }
 
     @RestController

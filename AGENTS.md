@@ -126,17 +126,55 @@ El dominio **NO depende** de frameworks ni de infraestructura.
 
 ---
 
-## 10. Documentación y trazabilidad
+## 10. Documentación, versionado y changelog
 
-- Documentar cambios relevantes en `/docs`, PR y `CHANGELOG.md`.
-- Versionado **SemVer** obligatorio.
-- CHANGELOG siguiendo:
-  https://keepachangelog.com/es-ES/1.1.0/
+### 10.1 Documentación obligatoria
+
+- Todo cambio realizado por un agente DEBE documentarse
+- La documentación DEBE vivir en la carpeta `/docs`
+- El formato de documentación DEBE ser Markdown (`.md`)
+- Cada documento debe:
+  - Explicar el **por qué** del cambio
+  - Describir brevemente el **qué** se ha modificado
+  - Indicar cualquier impacto relevante (arquitectura, API, UI, etc.)
 
 Los agentes NO deben:
-- Modificar versiones pasadas del changelog.
-- Inventar cambios.
-- Omitir impactos relevantes.
+- Documentar cambios fuera de `/docs`
+- Omitir documentación de cambios no triviales
+
+---
+
+### 10.2 Versionado del proyecto
+
+- **Cada cambio en el código** DEBE incrementar la versión en `pom.xml`
+- El versionado DEBE seguir **Semantic Versioning (SemVer)**:
+  - `MAJOR`: cambios incompatibles
+  - `MINOR`: cambios compatibles que añaden funcionalidad
+  - `PATCH`: correcciones compatibles
+
+Los agentes DEBEN:
+- Decidir explícitamente qué tipo de bump aplicar
+- Reflejar ese cambio de versión en el commit correspondiente
+
+---
+
+### 10.3 CHANGELOG
+
+- Todo cambio DEBE reflejarse en `CHANGELOG.md`
+- El formato DEBE seguir estrictamente:
+  https://keepachangelog.com/es-ES/1.1.0/
+
+Reglas obligatorias:
+- Usar secciones estándar (`Added`, `Changed`, `Fixed`, `Removed`, etc.)
+- Mantener una sección `Unreleased`
+- Asociar cada versión con su número y fecha
+- No mezclar cambios de distintas versiones
+
+Los agentes NO deben:
+- Modificar versiones antiguas del changelog
+- Omitir entradas relevantes
+- Inventar cambios no realizados
+
 
 ---
 
