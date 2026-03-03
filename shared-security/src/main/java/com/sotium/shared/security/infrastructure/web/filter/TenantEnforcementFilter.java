@@ -38,7 +38,6 @@ public class TenantEnforcementFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
-        final String path = request.getRequestURI();
-        return path.startsWith("/actuator") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/api/public");
+        return TenantFilterBypassPaths.shouldBypass(request.getRequestURI());
     }
 }

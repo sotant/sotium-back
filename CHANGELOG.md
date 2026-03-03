@@ -24,6 +24,8 @@ y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Guía operativa de integración y escenarios Postman en `docs/keycloak-resource-server-integration.md`.
 
 ### Changed
+- `TenantResolutionFilter` y `TenantEnforcementFilter` ahora excluyen explícitamente `/api/onboarding/**` del requisito de tenant para permitir onboarding autenticado sin relajar JWT en rutas protegidas.
+- Se centralizó la lógica de bypass de rutas para filtros de tenant en `shared-security` y se añadieron tests unitarios de `shouldNotFilter` para onboarding, rutas protegidas y rutas públicas.
 - Refactor de roles de seguridad a dominio (`Role` y `AuthenticatedUser`) eliminando strings hardcoded de roles en filtros de tenant y converter JWT.
 - Se incorporó Lombok en `identity` y `shared-security` para reducir boilerplate (constructores, getters de entidades y logging).
 - Se simplificaron JavaDocs dejando solo documentación en clases/métodos donde aporta contexto real.

@@ -17,7 +17,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -159,6 +162,24 @@ class TenantResolutionFilterTest {
         filter.doFilter(request("/api/identity/me"), new MockHttpServletResponse(), mock(FilterChain.class));
 
         verify(securityContextFacade).getRequiredAuthenticatedUser();
+    }
+
+
+    @Test
+    @DisplayName("tenantResolutionFilter_shouldNotFilter_onlyForConfiguredBypassPaths")
+    void tenantResolutionFilter_shouldNotFilter_onlyForConfiguredBypassPaths() {
+        final TenantResolutionFilter filter = new TenantResolutionFilter(
+            mock(SecurityContextFacade.class),
+            mock(TenantSelection.class),
+            mock(TenantAccessPort.class),
+            mock(TenantContextHolder.class)
+        );
+
+        assertAll(
+            () -> assertTrue(filter.shouldNotFilter(request("/api/onboarding/academies"))),
+            () -> assertFalse(filter.shouldNotFilter(request("/api/identity/me"))),
+            () -> assertTrue(filter.shouldNotFilter(request("/api/public/ping")))
+        );
     }
 
     private MockHttpServletRequest request(final String uri) {
