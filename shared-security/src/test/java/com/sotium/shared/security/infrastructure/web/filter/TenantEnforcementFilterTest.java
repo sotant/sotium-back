@@ -64,8 +64,8 @@ class TenantEnforcementFilterTest {
     }
 
     @Test
-    @DisplayName("tenantEnforcementFilter_shouldNotFilter_publicAndDocsPaths")
-    void tenantEnforcementFilter_shouldNotFilter_publicAndDocsPaths() throws ServletException, IOException {
+    @DisplayName("tenantEnforcementFilter_shouldNotFilter_publicDocsAndOnboardingPostPaths")
+    void tenantEnforcementFilter_shouldNotFilter_publicDocsAndOnboardingPostPaths() throws ServletException, IOException {
         final TenantContextHolder tenantContextHolder = mock(TenantContextHolder.class);
         final SecurityContextFacade securityContextFacade = mock(SecurityContextFacade.class);
         final TenantEnforcementFilter filter = new TenantEnforcementFilter(tenantContextHolder, securityContextFacade);
@@ -75,9 +75,10 @@ class TenantEnforcementFilterTest {
         filter.doFilter(request("/actuator/health"), new MockHttpServletResponse(), filterChain);
         filter.doFilter(request("/swagger-ui/index.html"), new MockHttpServletResponse(), filterChain);
         filter.doFilter(request("/v3/api-docs"), new MockHttpServletResponse(), filterChain);
+        filter.doFilter(request("POST", "/api/onboarding/academies"), new MockHttpServletResponse(), filterChain);
 
         verify(securityContextFacade, never()).getRequiredAuthenticatedUser();
-        verify(filterChain, times(4)).doFilter(any(), any());
+        verify(filterChain, times(5)).doFilter(any(), any());
     }
 
     @Test
@@ -97,7 +98,12 @@ class TenantEnforcementFilterTest {
     }
 
     private MockHttpServletRequest request(final String uri) {
+        return request("GET", uri);
+    }
+
+    private MockHttpServletRequest request(final String method, final String uri) {
         final MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod(method);
         request.setRequestURI(uri);
         return request;
     }

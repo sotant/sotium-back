@@ -52,6 +52,16 @@ public class TenantResolutionFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(final HttpServletRequest request) {
         final String path = request.getRequestURI();
-        return path.startsWith("/actuator") || path.startsWith("/swagger-ui") || path.startsWith("/v3/api-docs") || path.startsWith("/api/public");
+        final boolean publicOrInfraPath = path.startsWith("/actuator")
+            || path.startsWith("/swagger-ui")
+            || path.startsWith("/v3/api-docs")
+            || path.startsWith("/api/public");
+
+        // Onboarding academy registration is explicitly allowed without tenant context,
+        // but still requires JWT authentication at the security chain level.
+        final boolean onboardingWithoutTenant = "POST".equals(request.getMethod())
+            && "/api/onboarding/academies".equals(path);
+
+        return publicOrInfraPath || onboardingWithoutTenant;
     }
 }

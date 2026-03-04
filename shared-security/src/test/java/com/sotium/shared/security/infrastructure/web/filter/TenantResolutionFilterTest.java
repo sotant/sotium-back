@@ -119,8 +119,8 @@ class TenantResolutionFilterTest {
     }
 
     @Test
-    @DisplayName("tenantResolutionFilter_shouldNotFilter_publicAndDocsPaths")
-    void tenantResolutionFilter_shouldNotFilter_publicAndDocsPaths() throws ServletException, IOException {
+    @DisplayName("tenantResolutionFilter_shouldNotFilter_publicDocsAndOnboardingPostPaths")
+    void tenantResolutionFilter_shouldNotFilter_publicDocsAndOnboardingPostPaths() throws ServletException, IOException {
         final SecurityContextFacade securityContextFacade = mock(SecurityContextFacade.class);
         final TenantResolutionFilter filter = new TenantResolutionFilter(
             securityContextFacade,
@@ -136,9 +136,10 @@ class TenantResolutionFilterTest {
         filter.doFilter(request("/actuator/health"), response, filterChain);
         filter.doFilter(request("/swagger-ui/index.html"), response, filterChain);
         filter.doFilter(request("/v3/api-docs"), response, filterChain);
+        filter.doFilter(request("POST", "/api/onboarding/academies"), response, filterChain);
 
         verify(securityContextFacade, never()).getRequiredAuthenticatedUser();
-        verify(filterChain, org.mockito.Mockito.times(4)).doFilter(any(), any());
+        verify(filterChain, org.mockito.Mockito.times(5)).doFilter(any(), any());
     }
 
 
@@ -162,7 +163,12 @@ class TenantResolutionFilterTest {
     }
 
     private MockHttpServletRequest request(final String uri) {
+        return request("GET", uri);
+    }
+
+    private MockHttpServletRequest request(final String method, final String uri) {
         final MockHttpServletRequest request = new MockHttpServletRequest();
+        request.setMethod(method);
         request.setRequestURI(uri);
         return request;
     }
