@@ -15,4 +15,23 @@ public final class PersistenceMappers {
     public static AcademyMembership toDomain(final JpaMembershipEntity entity) {
         return new AcademyMembership(entity.getId(), entity.getAcademyId(), entity.getUserId(), entity.getRole(), entity.getStatus());
     }
+
+    public static JpaIdentityUserEntity toEntity(final IdentityUser identityUser) {
+        return JpaIdentityUserEntity.fromDomain(
+            identityUser.id(),
+            identityUser.keycloakSub(),
+            identityUser.email(),
+            identityUser.status()
+        );
+    }
+
+    public static JpaMembershipEntity toEntity(final AcademyMembership academyMembership) {
+        return JpaMembershipEntity.fromDomain(
+            academyMembership.id(),
+            academyMembership.academyId(),
+            academyMembership.userId(),
+            academyMembership.role(),
+            academyMembership.status()
+        );
+    }
 }

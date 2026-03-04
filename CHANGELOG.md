@@ -6,15 +6,15 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
-- Implementación funcional interna del módulo `academy` con dominio (`Academy`, `AcademySettings`), puertos de aplicación y caso de uso `CreateAcademyService` para alta de academias.
-- Persistencia JPA del módulo `academy` con entidades internas (`academies`, `academy_settings`), repositorios Spring Data y adaptadores de infraestructura.
-- Puerto público `AcademyRegistrationPort` con contratos `CreateAcademyCommand` y `CreateAcademyResult` para integración futura desde `onboarding`.
-- Cobertura de tests para `academy`: unitarios de dominio, unitario de aplicación (sin Spring) e integración de persistencia con Testcontainers.
-- Documentación `docs/academy-module-create-academy.md` y `academy/README.md` sobre responsabilidades, ownership de datos y alcance técnico.
+- Casos de uso idempotentes en `identity` para onboarding: `EnsureIdentityUserExistsFromTokenUseCase` y `AssignOwnerMembershipUseCase`, con cobertura de tests unitarios para creación, actualización, conflictos y reintentos concurrentes.
+- Extensión del contrato de tenant en `identity` para exponer academias accesibles por `sub` y validación booleana `sub -> academyId`, manteniendo la integración por puertos con `shared-security`.
+- Implementación funcional del módulo `onboarding` con caso de uso `RegisterAcademyUseCase`, endpoint `POST /api/onboarding/academies`, DTOs validados y manejo de errores con `ProblemDetail`.
+- Tests del módulo `onboarding` (unitarios y web) y tests de integración E2E en `bootstrap` para validar flujo completo y rollback transaccional.
+- Documentación técnica en `docs/identity-onboarding-idempotency.md` y `docs/onboarding-module-registration-orchestration.md`, además de `onboarding/README.md` para alcance y límites del módulo.
 
 ### Changed
-- Evolución de `academy` desde esqueleto estructural a módulo funcional alineado con el esquema base (`academies`, `academy_settings`) sin deduplicación ni idempotencia en esta iteración.
-- Incremento de versión del proyecto a `0.3.0-SNAPSHOT` en los POMs siguiendo SemVer con bump MINOR por nueva capacidad funcional compatible.
+- Adaptadores de persistencia de `identity` ampliados para soportar operaciones idempotentes (`findByEmail`, `save`, `findByAcademyIdAndUserId`) sin acoplar la capa de aplicación a JPA.
+- Incremento de versión del proyecto a `0.5.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding`.
 
 ## [0.1.0] - 2026-03-03
 

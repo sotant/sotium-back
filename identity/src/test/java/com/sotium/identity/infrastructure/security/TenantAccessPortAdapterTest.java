@@ -8,6 +8,7 @@ import com.sotium.shared.security.infrastructure.security.exceptions.ForbiddenEx
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,10 +24,23 @@ class TenantAccessPortAdapterTest {
         final UUID selectedAcademyId = UUID.randomUUID();
         final String expectedSub = "sub-1";
 
-        final ResolveTenantContextUseCase useCase = (keycloakSub, selectedId) -> {
-            assertEquals(expectedSub, keycloakSub);
-            assertEquals(selectedAcademyId, selectedId);
-            return academyId;
+        final ResolveTenantContextUseCase useCase = new ResolveTenantContextUseCase() {
+            @Override
+            public UUID resolveAcademyId(final String keycloakSub, final UUID selectedId) {
+                assertEquals(expectedSub, keycloakSub);
+                assertEquals(selectedAcademyId, selectedId);
+                return academyId;
+            }
+
+            @Override
+            public List<UUID> resolveAccessibleAcademyIds(final String keycloakSub) {
+                return List.of();
+            }
+
+            @Override
+            public boolean hasAccessToAcademy(final String keycloakSub, final UUID academyId) {
+                return false;
+            }
         };
 
         final TenantAccessPortAdapter adapter = new TenantAccessPortAdapter(useCase);
@@ -41,8 +55,21 @@ class TenantAccessPortAdapterTest {
     @DisplayName("tenantAccessPortAdapter_shouldTranslateIdentityAccessDeniedToForbidden")
     void tenantAccessPortAdapter_shouldTranslateIdentityAccessDeniedToForbidden() {
         final String expectedMessage = "Selected academy does not belong to the authenticated user";
-        final ResolveTenantContextUseCase useCase = (keycloakSub, selectedId) -> {
-            throw new IdentityAccessDeniedException(expectedMessage);
+        final ResolveTenantContextUseCase useCase = new ResolveTenantContextUseCase() {
+            @Override
+            public UUID resolveAcademyId(final String keycloakSub, final UUID selectedAcademyId) {
+                throw new IdentityAccessDeniedException(expectedMessage);
+            }
+
+            @Override
+            public List<UUID> resolveAccessibleAcademyIds(final String keycloakSub) {
+                return List.of();
+            }
+
+            @Override
+            public boolean hasAccessToAcademy(final String keycloakSub, final UUID academyId) {
+                return false;
+            }
         };
 
         final TenantAccessPortAdapter adapter = new TenantAccessPortAdapter(useCase);

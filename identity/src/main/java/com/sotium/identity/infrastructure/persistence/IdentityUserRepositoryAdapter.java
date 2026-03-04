@@ -17,4 +17,16 @@ public class IdentityUserRepositoryAdapter implements IdentityUserRepository {
     public Optional<IdentityUser> findByKeycloakSub(final String keycloakSub) {
         return springDataIdentityUserRepository.findByKeycloakSub(keycloakSub).map(PersistenceMappers::toDomain);
     }
+
+    @Override
+    public Optional<IdentityUser> findByEmail(final String email) {
+        return springDataIdentityUserRepository.findByEmail(email).map(PersistenceMappers::toDomain);
+    }
+
+    @Override
+    public IdentityUser save(final IdentityUser identityUser) {
+        return PersistenceMappers.toDomain(
+            springDataIdentityUserRepository.save(PersistenceMappers.toEntity(identityUser))
+        );
+    }
 }

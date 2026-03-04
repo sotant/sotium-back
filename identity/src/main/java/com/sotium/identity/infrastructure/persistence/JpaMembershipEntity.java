@@ -36,4 +36,20 @@ public class JpaMembershipEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MembershipStatus status;
+
+    public static JpaMembershipEntity fromDomain(
+        final UUID id,
+        final UUID academyId,
+        final UUID userId,
+        final MembershipRole role,
+        final MembershipStatus status
+    ) {
+        final JpaMembershipEntity entity = new JpaMembershipEntity();
+        entity.id = id;
+        entity.academyId = academyId;
+        entity.userId = userId;
+        entity.role = role;
+        entity.status = status;
+        return entity;
+    }
 }

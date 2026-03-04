@@ -31,4 +31,18 @@ public class JpaIdentityUserEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private IdentityUserStatus status;
+
+    public static JpaIdentityUserEntity fromDomain(
+        final UUID id,
+        final String keycloakSub,
+        final String email,
+        final IdentityUserStatus status
+    ) {
+        final JpaIdentityUserEntity entity = new JpaIdentityUserEntity();
+        entity.id = id;
+        entity.keycloakSub = keycloakSub;
+        entity.email = email;
+        entity.status = status;
+        return entity;
+    }
 }
