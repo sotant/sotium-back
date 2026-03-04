@@ -1,13 +1,13 @@
 package com.sotium.academy.infrastructure.persistence;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sotium.academy.domain.model.Academy;
 import com.sotium.academy.domain.model.AcademySettings;
 import com.sotium.academy.domain.valueobject.AcademyEmail;
 import com.sotium.academy.domain.valueobject.AcademyId;
 import com.sotium.academy.domain.valueobject.AcademyName;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 
 public final class AcademyPersistenceMapper {
 
@@ -61,7 +61,7 @@ public final class AcademyPersistenceMapper {
     private static JsonNode readTree(final String value) {
         try {
             return OBJECT_MAPPER.readTree(value);
-        } catch (JsonProcessingException exception) {
+        } catch (JacksonException exception) {
             throw new IllegalArgumentException("Invalid JSON payload for academy settings", exception);
         }
     }
