@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.sotium</groupId>
         <artifactId>sotium-back</artifactId>
-        <version>0.2.1-SNAPSHOT</version>
+        <version>0.3.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>academy</artifactId>
@@ -31,9 +31,20 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc-test</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>postgresql</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
