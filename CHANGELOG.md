@@ -5,6 +5,18 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Added
+- Casos de uso idempotentes en `identity` para onboarding: `EnsureIdentityUserExistsFromTokenUseCase` (provisionamiento por `keycloak_sub`) y `AssignOwnerMembershipUseCase` (asignación OWNER por `academyId` + `userId`).
+- Nuevo puerto de aplicación `ResolveIdentityTenantAccessUseCase` para resolver academias accesibles por `sub` y validar acceso tenant de forma desacoplada de JPA.
+- Nuevas excepciones de aplicación en `identity` para conflictos funcionales: `IdentityUserEmailConflictException` y `MembershipAlreadyExistsException`.
+- Nuevos tests unitarios en `identity` para los casos de uso de ensure user, assign owner y resolución de acceso tenant.
+- Documentación técnica en `docs/identity-onboarding-support-adjustments.md` con auditoría previa, decisiones y alcance.
+
+### Changed
+- Extensión de puertos de repositorio de `identity` para soportar persistencia idempotente (`save`, `findByEmail`, `findByAcademyIdAndUserId`) manteniendo hexagonalidad.
+- Ajuste de entidades/adaptadores JPA de `identity` para alinear columnas temporales (`created_at`, `updated_at`) y constraint unique de memberships `(academy_id, user_id)`.
+- Incremento de versión del proyecto a `0.4.0-SNAPSHOT` en los POMs, aplicando SemVer con bump MINOR por nuevas capacidades compatibles.
+
 ## [0.1.0] - 2026-03-03
 
 ### Added

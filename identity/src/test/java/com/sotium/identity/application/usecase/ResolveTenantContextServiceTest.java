@@ -59,7 +59,7 @@ class ResolveTenantContextServiceTest {
     @DisplayName("resolveTenantContext_shouldThrow_whenUserNotProvisioned")
     void resolveTenantContext_shouldThrow_whenUserNotProvisioned() {
         final ResolveTenantContextService service = new ResolveTenantContextService(
-            ignoredSub -> Optional.empty(),
+            emptyUserRepository(),
             membershipRepository(List.of())
         );
 
@@ -75,8 +75,8 @@ class ResolveTenantContextServiceTest {
     @DisplayName("resolveTenantContext_shouldThrow_whenUserStatusNotActive")
     void resolveTenantContext_shouldThrow_whenUserStatusNotActive() {
         final UUID userId = UUID.randomUUID();
-        final IdentityUserRepository userRepository = ignoredSub -> Optional.of(
-            new IdentityUser(userId, "sub-1", "user@test.com", IdentityUserStatus.INVITED)
+        final IdentityUserRepository userRepository = new InMemoryIdentityUserRepository(
+            List.of(new IdentityUser(userId, "sub-1", "user@test.com", IdentityUserStatus.INVITED))
         );
 
         final ResolveTenantContextService service = new ResolveTenantContextService(
@@ -151,14 +151,70 @@ class ResolveTenantContextServiceTest {
     }
 
     private IdentityUserRepository activeUserRepository(final UUID userId) {
-        return keycloakSub -> Optional.of(new IdentityUser(userId, keycloakSub, "owner@test.com", IdentityUserStatus.ACTIVE));
+        return new InMemoryIdentityUserRepository(List.of(
+            new IdentityUser(userId, "sub-1", "owner@test.com", IdentityUserStatus.ACTIVE)
+        ));
+    }
+
+    private IdentityUserRepository emptyUserRepository() {
+        return new InMemoryIdentityUserRepository(List.of());
     }
 
     private MembershipRepository membershipRepository(final List<AcademyMembership> memberships) {
-        return ignoredUserId -> memberships;
+        return new InMemoryMembershipRepository(memberships);
     }
 
     private AcademyMembership activeMembership(final UUID userId, final UUID academyId) {
         return new AcademyMembership(UUID.randomUUID(), academyId, userId, MembershipRole.OWNER, MembershipStatus.ACTIVE);
+    }
+
+    private static final class InMemoryIdentityUserRepository implements IdentityUserRepository {
+
+        private final List<IdentityUser> users;
+
+        private InMemoryIdentityUserRepository(final List<IdentityUser> users) {
+            this.users = users;
+        }
+
+        @Override
+        public Optional<IdentityUser> findByKeycloakSub(final String keycloakSub) {
+            return users.stream().filter(user -> user.keycloakSub().equals(keycloakSub)).findFirst();
+        }
+
+        @Override
+        public Optional<IdentityUser> findByEmail(final String email) {
+            return users.stream().filter(user -> user.email().equals(email)).findFirst();
+        }
+
+        @Override
+        public IdentityUser save(final IdentityUser identityUser) {
+            return identityUser;
+        }
+    }
+
+    private static final class InMemoryMembershipRepository implements MembershipRepository {
+
+        private final List<AcademyMembership> memberships;
+
+        private InMemoryMembershipRepository(final List<AcademyMembership> memberships) {
+            this.memberships = memberships;
+        }
+
+        @Override
+        public List<AcademyMembership> findActiveMembershipsByUserId(final UUID userId) {
+            return memberships;
+        }
+
+        @Override
+        public Optional<AcademyMembership> findByAcademyIdAndUserId(final UUID academyId, final UUID userId) {
+            return memberships.stream()
+                .filter(membership -> membership.academyId().equals(academyId) && membership.userId().equals(userId))
+                .findFirst();
+        }
+
+        @Override
+        public AcademyMembership save(final AcademyMembership academyMembership) {
+            return academyMembership;
+        }
     }
 }

@@ -8,4 +8,6 @@ import java.util.UUID;
 public interface SpringDataIdentityUserRepository extends JpaRepository<JpaIdentityUserEntity, UUID> {
 
     Optional<JpaIdentityUserEntity> findByKeycloakSub(String keycloakSub);
+
+    Optional<JpaIdentityUserEntity> findByEmail(String email);
 }

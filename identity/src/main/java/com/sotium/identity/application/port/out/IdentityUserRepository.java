@@ -7,4 +7,8 @@ import java.util.Optional;
 public interface IdentityUserRepository {
 
     Optional<IdentityUser> findByKeycloakSub(String keycloakSub);
+
+    Optional<IdentityUser> findByEmail(String email);
+
+    IdentityUser save(IdentityUser identityUser);
 }

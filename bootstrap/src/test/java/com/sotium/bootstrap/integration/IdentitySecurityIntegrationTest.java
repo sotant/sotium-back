@@ -235,7 +235,7 @@ class IdentitySecurityIntegrationTest {
 
     private void insertIdentityUser(final UUID id, final String sub, final String email, final IdentityUserStatus status) {
         jdbcTemplate.update(
-            "INSERT INTO identity_users (id, keycloak_sub, email, status) VALUES (?, ?, ?, ?)",
+            "INSERT INTO identity_users (id, keycloak_sub, email, status, created_at, updated_at) VALUES (?, ?, ?, ?, now(), now())",
             id,
             sub,
             email,
@@ -251,7 +251,7 @@ class IdentitySecurityIntegrationTest {
         final String status
     ) {
         jdbcTemplate.update(
-            "INSERT INTO academy_memberships (id, academy_id, user_id, role, status) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO academy_memberships (id, academy_id, user_id, role, status, created_at) VALUES (?, ?, ?, ?, ?, now())",
             id,
             academyId,
             userId,

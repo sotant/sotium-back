@@ -8,16 +8,25 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "academy_memberships")
+@Table(
+    name = "academy_memberships",
+    uniqueConstraints = @UniqueConstraint(name = "uk_membership_academy_user", columnNames = {"academy_id", "user_id"})
+)
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JpaMembershipEntity {
 
     @Id
@@ -36,4 +45,7 @@ public class JpaMembershipEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private MembershipStatus status;
+
+    @Column(name = "created_at", nullable = false)
+    private Instant createdAt;
 }
