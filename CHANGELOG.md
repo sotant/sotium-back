@@ -5,6 +5,14 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Added
+- Nuevos módulos Maven `academy` y `onboarding` con estructura base de arquitectura hexagonal (`domain`, `application`, `infrastructure`, `interfaces`) sin lógica funcional.
+- Archivo de documentación `docs/academy-onboarding-modules-bootstrap.md` con motivación, alcance e impacto del cambio estructural.
+
+### Changed
+- Integración de `academy` y `onboarding` en el agregador Maven raíz (`modules` y `dependencyManagement`) y en el módulo `bootstrap` para su composición en tiempo de ejecución.
+- Incremento de versión del proyecto a `0.2.1-SNAPSHOT` en los POMs del repositorio siguiendo SemVer con bump MINOR por incorporación de nuevos módulos compatibles.
+
 ## [0.1.0] - 2026-03-03
 
 ### Added
