@@ -5,6 +5,17 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Added
+- Implementación funcional interna del módulo `academy` con dominio (`Academy`, `AcademySettings`), puertos de aplicación y caso de uso `CreateAcademyService` para alta de academias.
+- Persistencia JPA del módulo `academy` con entidades internas (`academies`, `academy_settings`), repositorios Spring Data y adaptadores de infraestructura.
+- Puerto público `AcademyRegistrationPort` con contratos `CreateAcademyCommand` y `CreateAcademyResult` para integración futura desde `onboarding`.
+- Cobertura de tests para `academy`: unitarios de dominio, unitario de aplicación (sin Spring) e integración de persistencia con Testcontainers.
+- Documentación `docs/academy-module-create-academy.md` y `academy/README.md` sobre responsabilidades, ownership de datos y alcance técnico.
+
+### Changed
+- Evolución de `academy` desde esqueleto estructural a módulo funcional alineado con el esquema base (`academies`, `academy_settings`) sin deduplicación ni idempotencia en esta iteración.
+- Incremento de versión del proyecto a `0.3.0-SNAPSHOT` en los POMs siguiendo SemVer con bump MINOR por nueva capacidad funcional compatible.
+
 ## [0.1.0] - 2026-03-03
 
 ### Added
