@@ -11,10 +11,13 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Implementación funcional del módulo `onboarding` con caso de uso `RegisterAcademyUseCase`, endpoint `POST /api/onboarding/academies`, DTOs validados y manejo de errores con `ProblemDetail`.
 - Tests del módulo `onboarding` (unitarios y web) y tests de integración E2E en `bootstrap` para validar flujo completo y rollback transaccional.
 - Documentación técnica en `docs/identity-onboarding-idempotency.md` y `docs/onboarding-module-registration-orchestration.md`, además de `onboarding/README.md` para alcance y límites del módulo.
+- Ajuste en `shared-security` para permitir únicamente `POST /api/onboarding/academies` sin tenant resuelto, manteniendo autenticación JWT obligatoria y enforcement tenant para rutas tenant-scoped.
+- Tests de no regresión de seguridad para onboarding y rutas tenant-scoped sin tenant.
+- Documentación `docs/modular-contracts-and-security-exception.md` con límites de módulos, ownership de tablas y criterios de seguridad/idempotencia.
 
 ### Changed
 - Adaptadores de persistencia de `identity` ampliados para soportar operaciones idempotentes (`findByEmail`, `save`, `findByAcademyIdAndUserId`) sin acoplar la capa de aplicación a JPA.
-- Incremento de versión del proyecto a `0.5.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding`.
+- Incremento de versión del proyecto a `0.6.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding`.
 
 ## [0.1.0] - 2026-03-03
 

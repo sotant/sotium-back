@@ -26,6 +26,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +64,29 @@ class OnboardingRegistrationIntegrationTest {
         jdbcTemplate.update("DELETE FROM academy_settings");
         jdbcTemplate.update("DELETE FROM academies");
         jdbcTemplate.update("DELETE FROM identity_users");
+    }
+
+
+    @Test
+    @DisplayName("security_registerAcademy_shouldReturnUnauthorized_whenNoToken")
+    void security_registerAcademy_shouldReturnUnauthorized_whenNoToken() throws Exception {
+        mockMvc.perform(post("/api/onboarding/academies")
+                .contentType("application/json")
+                .content("""
+                    {
+                      "name":"Academy One",
+                      "email":"academy-one@test.com"
+                    }
+                    """))
+            .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("security_identityMe_shouldDenyTenantScopedEndpoint_whenTokenWithoutTenant")
+    void security_identityMe_shouldDenyTenantScopedEndpoint_whenTokenWithoutTenant() throws Exception {
+        mockMvc.perform(get("/api/identity/me")
+                .with(authenticatedUser("sub-owner", "owner@test.com", Set.of(Role.OWNER))))
+            .andExpect(status().isForbidden());
     }
 
     @Test
