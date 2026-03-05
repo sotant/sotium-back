@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -28,5 +29,10 @@ public class IdentityUserRepositoryAdapter implements IdentityUserRepository {
         return PersistenceMappers.toDomain(
             springDataIdentityUserRepository.save(PersistenceMappers.toEntity(identityUser))
         );
+    }
+
+    @Override
+    public void deleteById(final UUID identityUserId) {
+        springDataIdentityUserRepository.deleteById(identityUserId);
     }
 }

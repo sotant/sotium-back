@@ -85,5 +85,10 @@ class EnsureIdentityUserExistsFromTokenServiceTest {
             users.put(identityUser.id(), identityUser);
             return identityUser;
         }
+
+        @Override
+        public void deleteById(final UUID identityUserId) {
+            users.remove(identityUserId);
+        }
     }
 }
