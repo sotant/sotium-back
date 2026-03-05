@@ -14,10 +14,14 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Ajuste en `shared-security` para permitir únicamente `POST /api/onboarding/academies` sin tenant resuelto, manteniendo autenticación JWT obligatoria y enforcement tenant para rutas tenant-scoped.
 - Tests de no regresión de seguridad para onboarding y rutas tenant-scoped sin tenant.
 - Documentación `docs/modular-contracts-and-security-exception.md` con límites de módulos, ownership de tablas y criterios de seguridad/idempotencia.
+- Endpoint público `POST /api/public/identity/purge-by-sub` en `identity` para borrar por `sub` la membresía, la academia asociada y la identidad de base de datos.
+- Caso de uso transaccional `DeleteIdentityBySubUseCase` en `identity`, con cobertura de tests unitarios para borrado efectivo y no-op cuando el `sub` no existe.
+- Documentación técnica del cambio en `docs/identity-public-purge-by-sub.md`.
 
 ### Changed
 - Adaptadores de persistencia de `identity` ampliados para soportar operaciones idempotentes (`findByEmail`, `save`, `findByAcademyIdAndUserId`) sin acoplar la capa de aplicación a JPA.
-- Incremento de versión del proyecto a `0.6.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding`.
+- Incremento de versión del proyecto a `0.7.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding` y el endpoint de purga pública en `identity`.
+- Contratos y adaptadores de persistencia de `identity` y `academy` ampliados para soportar operaciones de borrado requeridas por la purga pública.
 
 ## [0.1.0] - 2026-03-03
 

@@ -1,7 +1,7 @@
 package com.sotium.identity.infrastructure.persistence;
 
-import com.sotium.identity.application.port.out.MembershipRepository;
 import com.sotium.identity.application.exception.DuplicateAcademyMembershipException;
+import com.sotium.identity.application.port.out.MembershipRepository;
 import com.sotium.identity.domain.model.AcademyMembership;
 import com.sotium.identity.domain.model.MembershipStatus;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +26,15 @@ public class MembershipRepositoryAdapter implements MembershipRepository {
             .toList();
     }
 
+
+    @Override
+    public List<AcademyMembership> findByUserId(final UUID userId) {
+        return springDataMembershipRepository.findByUserId(userId)
+            .stream()
+            .map(PersistenceMappers::toDomain)
+            .toList();
+    }
+
     @Override
     public Optional<AcademyMembership> findByAcademyIdAndUserId(final UUID academyId, final UUID userId) {
         return springDataMembershipRepository.findByAcademyIdAndUserId(academyId, userId)
@@ -45,5 +54,10 @@ public class MembershipRepositoryAdapter implements MembershipRepository {
                 exception
             );
         }
+    }
+
+    @Override
+    public void deleteByUserId(final UUID userId) {
+        springDataMembershipRepository.deleteByUserId(userId);
     }
 }

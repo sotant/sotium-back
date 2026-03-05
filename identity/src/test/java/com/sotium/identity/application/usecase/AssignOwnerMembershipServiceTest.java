@@ -96,6 +96,13 @@ class AssignOwnerMembershipServiceTest {
         }
 
         @Override
+        public List<AcademyMembership> findByUserId(final UUID userId) {
+            return memberships.values().stream()
+                .filter(membership -> membership.userId().equals(userId))
+                .toList();
+        }
+
+        @Override
         public Optional<AcademyMembership> findByAcademyIdAndUserId(final UUID academyId, final UUID userId) {
             return Optional.ofNullable(memberships.get(key(academyId, userId)));
         }
@@ -121,6 +128,11 @@ class AssignOwnerMembershipServiceTest {
             }
             memberships.put(key, academyMembership);
             return academyMembership;
+        }
+
+        @Override
+        public void deleteByUserId(final UUID userId) {
+            memberships.entrySet().removeIf(entry -> entry.getValue().userId().equals(userId));
         }
 
         private String key(final UUID academyId, final UUID userId) {

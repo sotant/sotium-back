@@ -11,4 +11,6 @@ public interface IdentityUserRepository {
     Optional<IdentityUser> findByEmail(String email);
 
     IdentityUser save(IdentityUser identityUser);
+
+    void deleteById(java.util.UUID identityUserId);
 }

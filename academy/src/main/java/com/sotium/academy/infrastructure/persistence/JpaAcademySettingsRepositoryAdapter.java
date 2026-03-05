@@ -5,6 +5,8 @@ import com.sotium.academy.domain.model.AcademySettings;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class JpaAcademySettingsRepositoryAdapter implements AcademySettingsRepositoryPort {
@@ -17,5 +19,10 @@ public class JpaAcademySettingsRepositoryAdapter implements AcademySettingsRepos
             AcademyPersistenceMapper.toJpaEntity(academySettings)
         );
         return AcademyPersistenceMapper.toDomain(persistedEntity);
+    }
+
+    @Override
+    public void deleteByAcademyId(final UUID academyId) {
+        springDataAcademySettingsRepository.deleteById(academyId);
     }
 }

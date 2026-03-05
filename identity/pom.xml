@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.sotium</groupId>
         <artifactId>sotium-back</artifactId>
-        <version>0.6.0-SNAPSHOT</version>
+        <version>0.7.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>identity</artifactId>
@@ -25,6 +25,10 @@
         <dependency>
             <groupId>com.sotium</groupId>
             <artifactId>shared-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sotium</groupId>
+            <artifactId>academy</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

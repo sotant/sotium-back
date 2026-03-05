@@ -10,7 +10,11 @@ public interface MembershipRepository {
 
     List<AcademyMembership> findActiveMembershipsByUserId(UUID userId);
 
+    List<AcademyMembership> findByUserId(UUID userId);
+
     Optional<AcademyMembership> findByAcademyIdAndUserId(UUID academyId, UUID userId);
 
     AcademyMembership save(AcademyMembership academyMembership);
+
+    void deleteByUserId(UUID userId);
 }
