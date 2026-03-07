@@ -1,5 +1,6 @@
 package com.sotium.identity.domain.model;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public record UserProfile(
@@ -9,6 +10,8 @@ public record UserProfile(
     String lastName,
     String phone,
     String avatarUrl,
-    String bio
+    String bio,
+    OffsetDateTime createdAt,
+    OffsetDateTime updatedAt
 ) {
 }

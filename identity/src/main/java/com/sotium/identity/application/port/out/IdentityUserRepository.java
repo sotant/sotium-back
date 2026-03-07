@@ -3,8 +3,11 @@ package com.sotium.identity.application.port.out;
 import com.sotium.identity.domain.model.IdentityUser;
 
 import java.util.Optional;
+import java.util.UUID;
 
 public interface IdentityUserRepository {
+
+    Optional<IdentityUser> findById(UUID identityUserId);
 
     Optional<IdentityUser> findByKeycloakSub(String keycloakSub);
 
@@ -12,5 +15,5 @@ public interface IdentityUserRepository {
 
     IdentityUser save(IdentityUser identityUser);
 
-    void deleteById(java.util.UUID identityUserId);
+    void deleteById(UUID identityUserId);
 }

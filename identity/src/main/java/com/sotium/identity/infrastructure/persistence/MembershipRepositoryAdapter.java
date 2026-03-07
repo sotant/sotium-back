@@ -36,6 +36,14 @@ public class MembershipRepositoryAdapter implements MembershipRepository {
     }
 
     @Override
+    public List<AcademyMembership> findByAcademyId(final UUID academyId) {
+        return springDataMembershipRepository.findByAcademyId(academyId)
+            .stream()
+            .map(PersistenceMappers::toDomain)
+            .toList();
+    }
+
+    @Override
     public Optional<AcademyMembership> findByAcademyIdAndUserId(final UUID academyId, final UUID userId) {
         return springDataMembershipRepository.findByAcademyIdAndUserId(academyId, userId)
             .map(PersistenceMappers::toDomain);

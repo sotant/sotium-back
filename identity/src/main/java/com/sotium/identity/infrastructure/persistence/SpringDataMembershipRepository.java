@@ -13,6 +13,8 @@ public interface SpringDataMembershipRepository extends JpaRepository<JpaMembers
 
     List<JpaMembershipEntity> findByUserId(UUID userId);
 
+    List<JpaMembershipEntity> findByAcademyId(UUID academyId);
+
     Optional<JpaMembershipEntity> findByAcademyIdAndUserId(UUID academyId, UUID userId);
 
     void deleteByUserId(UUID userId);

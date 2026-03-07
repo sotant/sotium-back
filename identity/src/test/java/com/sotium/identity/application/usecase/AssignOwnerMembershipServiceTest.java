@@ -103,6 +103,13 @@ class AssignOwnerMembershipServiceTest {
         }
 
         @Override
+        public List<AcademyMembership> findByAcademyId(final UUID academyId) {
+            return memberships.values().stream()
+                .filter(membership -> membership.academyId().equals(academyId))
+                .toList();
+        }
+
+        @Override
         public Optional<AcademyMembership> findByAcademyIdAndUserId(final UUID academyId, final UUID userId) {
             return Optional.ofNullable(memberships.get(key(academyId, userId)));
         }

@@ -1,6 +1,7 @@
 package com.sotium.identity.interfaces.web;
 
 import com.sotium.identity.application.port.in.DeleteIdentityBySubUseCase;
+import com.sotium.identity.application.port.in.ListAcademyUsersPublicUseCase;
 import com.sotium.identity.application.port.in.RegisterPublicUserUseCase;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -26,11 +30,37 @@ public class PublicIdentityController {
 
     private final DeleteIdentityBySubUseCase deleteIdentityBySubUseCase;
     private final RegisterPublicUserUseCase registerPublicUserUseCase;
+    private final ListAcademyUsersPublicUseCase listAcademyUsersPublicUseCase;
 
     @GetMapping("/academy-registration")
     public ResponseEntity<Map<String, String>> registrationProbe() {
         log.debug("Public academy registration probe requested");
         return ResponseEntity.ok(Map.of("status", "registration endpoint available"));
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<PublicUserResponse>> listAcademyUsers(@RequestParam final UUID academyId) {
+        final ListAcademyUsersPublicUseCase.ListAcademyUsersPublicResult result = listAcademyUsersPublicUseCase.list(
+            new ListAcademyUsersPublicUseCase.ListAcademyUsersPublicCommand(academyId)
+        );
+
+        final List<PublicUserResponse> response = result.users()
+            .stream()
+            .map(user -> new PublicUserResponse(
+                user.id(),
+                user.userId(),
+                user.firstName(),
+                user.lastName(),
+                user.phone(),
+                user.avatarUrl(),
+                user.bio(),
+                user.createdAt(),
+                user.updatedAt(),
+                user.email()
+            ))
+            .toList();
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register-user")
@@ -66,6 +96,20 @@ public class PublicIdentityController {
         String name,
         String surname,
         String phone
+    ) {
+    }
+
+    public record PublicUserResponse(
+        UUID id,
+        UUID userId,
+        String firstName,
+        String lastName,
+        String phone,
+        String avatarUrl,
+        String bio,
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt,
+        String email
     ) {
     }
 }

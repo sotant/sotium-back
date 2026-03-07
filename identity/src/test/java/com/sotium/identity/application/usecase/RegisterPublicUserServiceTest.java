@@ -111,6 +111,11 @@ class RegisterPublicUserServiceTest {
         private final Map<UUID, IdentityUser> users = new HashMap<>();
 
         @Override
+        public Optional<IdentityUser> findById(final UUID identityUserId) {
+            return Optional.ofNullable(users.get(identityUserId));
+        }
+
+        @Override
         public Optional<IdentityUser> findByKeycloakSub(final String keycloakSub) {
             return users.values().stream().filter(user -> user.keycloakSub().equals(keycloakSub)).findFirst();
         }
@@ -163,6 +168,13 @@ class RegisterPublicUserServiceTest {
         public List<AcademyMembership> findByUserId(final UUID userId) {
             return memberships.values().stream()
                 .filter(membership -> membership.userId().equals(userId))
+                .toList();
+        }
+
+        @Override
+        public List<AcademyMembership> findByAcademyId(final UUID academyId) {
+            return memberships.values().stream()
+                .filter(membership -> membership.academyId().equals(academyId))
                 .toList();
         }
 

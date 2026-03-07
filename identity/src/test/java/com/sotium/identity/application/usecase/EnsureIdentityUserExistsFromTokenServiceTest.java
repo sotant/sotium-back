@@ -71,6 +71,11 @@ class EnsureIdentityUserExistsFromTokenServiceTest {
         private final Map<UUID, IdentityUser> users = new HashMap<>();
 
         @Override
+        public Optional<IdentityUser> findById(final UUID identityUserId) {
+            return Optional.ofNullable(users.get(identityUserId));
+        }
+
+        @Override
         public Optional<IdentityUser> findByKeycloakSub(final String keycloakSub) {
             return users.values().stream().filter(user -> user.keycloakSub().equals(keycloakSub)).findFirst();
         }

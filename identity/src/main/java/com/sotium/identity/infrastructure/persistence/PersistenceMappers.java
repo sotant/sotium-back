@@ -34,7 +34,9 @@ public final class PersistenceMappers {
             entity.getLastName(),
             entity.getPhone(),
             entity.getAvatarUrl(),
-            entity.getBio()
+            entity.getBio(),
+            entity.getCreatedAt(),
+            entity.getUpdatedAt()
         );
     }
 
@@ -46,7 +48,9 @@ public final class PersistenceMappers {
             userProfile.lastName(),
             userProfile.phone(),
             userProfile.avatarUrl(),
-            userProfile.bio()
+            userProfile.bio(),
+            userProfile.createdAt(),
+            userProfile.updatedAt()
         );
     }
 

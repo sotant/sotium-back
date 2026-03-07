@@ -8,6 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Entity
@@ -37,6 +38,12 @@ public class JpaUserProfileEntity {
     @Column(name = "bio")
     private String bio;
 
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "updated_at", insertable = false, updatable = false)
+    private OffsetDateTime updatedAt;
+
     public static JpaUserProfileEntity fromDomain(
         final UUID id,
         final UUID userId,
@@ -44,7 +51,9 @@ public class JpaUserProfileEntity {
         final String lastName,
         final String phone,
         final String avatarUrl,
-        final String bio
+        final String bio,
+        final OffsetDateTime createdAt,
+        final OffsetDateTime updatedAt
     ) {
         final JpaUserProfileEntity entity = new JpaUserProfileEntity();
         entity.id = id;
@@ -54,6 +63,8 @@ public class JpaUserProfileEntity {
         entity.phone = phone;
         entity.avatarUrl = avatarUrl;
         entity.bio = bio;
+        entity.createdAt = createdAt;
+        entity.updatedAt = updatedAt;
         return entity;
     }
 }

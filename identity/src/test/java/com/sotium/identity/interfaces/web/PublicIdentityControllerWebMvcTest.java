@@ -1,6 +1,7 @@
 package com.sotium.identity.interfaces.web;
 
 import com.sotium.identity.application.port.in.DeleteIdentityBySubUseCase;
+import com.sotium.identity.application.port.in.ListAcademyUsersPublicUseCase;
 import com.sotium.identity.application.port.in.RegisterPublicUserUseCase;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -34,6 +35,9 @@ class PublicIdentityControllerWebMvcTest {
     @MockBean
     private RegisterPublicUserUseCase registerPublicUserUseCase;
 
+    @MockBean
+    private ListAcademyUsersPublicUseCase listAcademyUsersPublicUseCase;
+
     @Test
     @DisplayName("publicRegistrationProbe_shouldReturn200AndStatusPayload")
     void publicRegistrationProbe_shouldReturn200AndStatusPayload() throws Exception {
@@ -42,6 +46,37 @@ class PublicIdentityControllerWebMvcTest {
             .andExpect(content().json("""
                 {"status":"registration endpoint available"}
                 """));
+    }
+
+
+    @Test
+    @DisplayName("listAcademyUsers_shouldReturn200AndUsersPayload")
+    void listAcademyUsers_shouldReturn200AndUsersPayload() throws Exception {
+        final UUID profileId = UUID.randomUUID();
+        final UUID userId = UUID.randomUUID();
+
+        when(listAcademyUsersPublicUseCase.list(any()))
+            .thenReturn(new ListAcademyUsersPublicUseCase.ListAcademyUsersPublicResult(java.util.List.of(
+                new ListAcademyUsersPublicUseCase.UserSummary(
+                    profileId,
+                    userId,
+                    "John",
+                    "Doe",
+                    "600123123",
+                    "https://mock.sotium/avatar/default",
+                    "Mock bio",
+                    null,
+                    null,
+                    "john.doe@test.com"
+                )
+            )));
+
+        mockMvc.perform(get("/api/public/identity/users")
+                .queryParam("academyId", "d5f4ae19-8bf4-4f13-b2fa-c4ec59895ca4"))
+            .andExpect(status().isOk())
+            .andExpect(content().json("""
+                [{"id":"%s","userId":"%s","firstName":"John","lastName":"Doe","phone":"600123123","avatarUrl":"https://mock.sotium/avatar/default","bio":"Mock bio","createdAt":null,"updatedAt":null,"email":"john.doe@test.com"}]
+                """.formatted(profileId, userId)));
     }
 
     @Test

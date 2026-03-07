@@ -53,7 +53,9 @@ public class RegisterPublicUserService implements RegisterPublicUserUseCase {
             valueOrMock(command.surname(), "Mock Surname"),
             valueOrMock(command.phone(), "000000000"),
             DEFAULT_AVATAR_URL,
-            DEFAULT_BIO
+            DEFAULT_BIO,
+            null,
+            null
         ));
 
         final AcademyMembership createdMembership = membershipRepository.save(new AcademyMembership(
