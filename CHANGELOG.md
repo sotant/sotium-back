@@ -5,6 +5,9 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
 ## [Unreleased]
 
+### Fixed
+- Corrección del mapeo JPA de `user_profiles.created_at` en `identity` para declarar `nullable = false` y alinear el modelo con el esquema `NOT NULL`, evitando el fallo de arranque por validación de Hibernate.
+
 ### Added
 - Endpoint público `GET /api/public/identity/users` para listar usuarios de una academia, devolviendo todos los campos de `user_profiles` más `email` de `identity_users`.
 - Caso de uso `ListAcademyUsersPublicUseCase` y servicio de aplicación para resolver membresías por academia y consolidar perfil + email por usuario.
@@ -26,6 +29,7 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación técnica del cambio en `docs/identity-public-purge-by-sub.md`.
 
 ### Changed
+- Incremento de versión del proyecto a `0.9.1-SNAPSHOT` siguiendo SemVer con bump PATCH por corrección de nulabilidad en mapeo JPA de `user_profiles.created_at` en `identity`.
 - Incremento de versión del proyecto a `0.9.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación del endpoint público de listado de usuarios por academia en `identity`.
 - Incremento de versión del proyecto a `0.8.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación del endpoint público de alta de usuarios en `identity`.
 - Adaptadores de persistencia de `identity` ampliados para soportar operaciones idempotentes (`findByEmail`, `save`, `findByAcademyIdAndUserId`) sin acoplar la capa de aplicación a JPA.
