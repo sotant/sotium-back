@@ -2,6 +2,7 @@ package com.sotium.identity.infrastructure.persistence;
 
 import com.sotium.identity.domain.model.AcademyMembership;
 import com.sotium.identity.domain.model.IdentityUser;
+import com.sotium.identity.domain.model.UserProfile;
 
 public final class PersistenceMappers {
 
@@ -22,6 +23,30 @@ public final class PersistenceMappers {
             identityUser.keycloakSub(),
             identityUser.email(),
             identityUser.status()
+        );
+    }
+
+    public static UserProfile toDomain(final JpaUserProfileEntity entity) {
+        return new UserProfile(
+            entity.getId(),
+            entity.getUserId(),
+            entity.getFirstName(),
+            entity.getLastName(),
+            entity.getPhone(),
+            entity.getAvatarUrl(),
+            entity.getBio()
+        );
+    }
+
+    public static JpaUserProfileEntity toEntity(final UserProfile userProfile) {
+        return JpaUserProfileEntity.fromDomain(
+            userProfile.id(),
+            userProfile.userId(),
+            userProfile.firstName(),
+            userProfile.lastName(),
+            userProfile.phone(),
+            userProfile.avatarUrl(),
+            userProfile.bio()
         );
     }
 
