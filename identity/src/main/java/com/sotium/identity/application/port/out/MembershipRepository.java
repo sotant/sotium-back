@@ -12,6 +12,8 @@ public interface MembershipRepository {
 
     List<AcademyMembership> findByUserId(UUID userId);
 
+    List<AcademyMembership> findByAcademyId(UUID academyId);
+
     Optional<AcademyMembership> findByAcademyIdAndUserId(UUID academyId, UUID userId);
 
     AcademyMembership save(AcademyMembership academyMembership);

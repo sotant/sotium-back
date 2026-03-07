@@ -6,6 +6,13 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 ## [Unreleased]
 
 ### Added
+- Endpoint público `GET /api/public/identity/users` para listar usuarios de una academia, devolviendo todos los campos de `user_profiles` más `email` de `identity_users`.
+- Caso de uso `ListAcademyUsersPublicUseCase` y servicio de aplicación para resolver membresías por academia y consolidar perfil + email por usuario.
+- Documentación técnica del cambio en `docs/identity-public-list-academy-users.md`.
+- Endpoint público `POST /api/public/identity/register-user` en `identity` para alta de usuario, creación de perfil (`user_profiles`) y membresía activa con rol `USER` en `academy_memberships`.
+- Caso de uso transaccional `RegisterPublicUserUseCase` con generación de `keycloak_sub` aleatorio y fallback de datos mock para campos opcionales de perfil.
+- Persistencia de perfiles de usuario en `identity` (`JpaUserProfileEntity`, repositorio Spring Data y adaptador), con cobertura de tests unitarios del caso de uso.
+- Documentación técnica del cambio en `docs/identity-public-register-user.md`.
 - Casos de uso idempotentes en `identity` para onboarding: `EnsureIdentityUserExistsFromTokenUseCase` y `AssignOwnerMembershipUseCase`, con cobertura de tests unitarios para creación, actualización, conflictos y reintentos concurrentes.
 - Extensión del contrato de tenant en `identity` para exponer academias accesibles por `sub` y validación booleana `sub -> academyId`, manteniendo la integración por puertos con `shared-security`.
 - Implementación funcional del módulo `onboarding` con caso de uso `RegisterAcademyUseCase`, endpoint `POST /api/onboarding/academies`, DTOs validados y manejo de errores con `ProblemDetail`.
@@ -19,6 +26,8 @@ Y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 - Documentación técnica del cambio en `docs/identity-public-purge-by-sub.md`.
 
 ### Changed
+- Incremento de versión del proyecto a `0.9.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación del endpoint público de listado de usuarios por academia en `identity`.
+- Incremento de versión del proyecto a `0.8.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación del endpoint público de alta de usuarios en `identity`.
 - Adaptadores de persistencia de `identity` ampliados para soportar operaciones idempotentes (`findByEmail`, `save`, `findByAcademyIdAndUserId`) sin acoplar la capa de aplicación a JPA.
 - Incremento de versión del proyecto a `0.7.0-SNAPSHOT` siguiendo SemVer con bump MINOR por incorporación funcional del módulo `onboarding` y el endpoint de purga pública en `identity`.
 - Contratos y adaptadores de persistencia de `identity` y `academy` ampliados para soportar operaciones de borrado requeridas por la purga pública.
