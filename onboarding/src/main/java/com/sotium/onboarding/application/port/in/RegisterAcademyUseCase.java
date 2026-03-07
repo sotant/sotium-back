@@ -8,7 +8,6 @@ public interface RegisterAcademyUseCase {
 
     record RegisterAcademyCommand(
         String academyName,
-        String academyEmail,
         String phone,
         String timezone,
         String ownerSub,

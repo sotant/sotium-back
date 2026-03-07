@@ -41,8 +41,8 @@ public final class AcademyPersistenceMapper {
             .academyId(academySettings.academyId().value())
             .phone(academySettings.phone())
             .timezone(academySettings.timezone())
-            .openingHours(readTree(academySettings.openingHours()))
-            .holidays(readTree(academySettings.holidays()))
+//            .openingHours(readTree(academySettings.openingHours()))
+//            .holidays(readTree(academySettings.holidays()))
             .updatedAt(academySettings.updatedAt())
             .build();
     }
@@ -52,10 +52,16 @@ public final class AcademyPersistenceMapper {
             new AcademyId(academySettingsJpaEntity.getAcademyId()),
             academySettingsJpaEntity.getPhone(),
             academySettingsJpaEntity.getTimezone(),
-            academySettingsJpaEntity.getOpeningHours().toString(),
-            academySettingsJpaEntity.getHolidays().toString(),
             academySettingsJpaEntity.getUpdatedAt()
         );
+//        return new AcademySettings(
+//                new AcademyId(academySettingsJpaEntity.getAcademyId()),
+//                academySettingsJpaEntity.getPhone(),
+//                academySettingsJpaEntity.getTimezone(),
+//                academySettingsJpaEntity.getOpeningHours().toString(),
+//                academySettingsJpaEntity.getHolidays().toString(),
+//                academySettingsJpaEntity.getUpdatedAt()
+//        );
     }
 
     private static JsonNode readTree(final String value) {

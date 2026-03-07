@@ -34,13 +34,13 @@ public class AcademySettingsJpaEntity {
     @Column(name = "timezone", nullable = false, length = 50)
     private String timezone;
 
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "opening_hours", nullable = false, columnDefinition = "jsonb")
-    private JsonNode openingHours;
-
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "holidays", nullable = false, columnDefinition = "jsonb")
-    private JsonNode holidays;
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    @Column(name = "opening_hours", nullable = false, columnDefinition = "jsonb")
+//    private JsonNode openingHours;
+//
+//    @JdbcTypeCode(SqlTypes.JSON)
+//    @Column(name = "holidays", nullable = false, columnDefinition = "jsonb")
+//    private JsonNode holidays;
 
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;

@@ -9,8 +9,8 @@ public record AcademySettings(
     AcademyId academyId,
     String phone,
     String timezone,
-    String openingHours,
-    String holidays,
+//    String openingHours,
+//    String holidays,
     Instant updatedAt
 ) {
 
@@ -21,8 +21,8 @@ public record AcademySettings(
     public AcademySettings {
         Objects.requireNonNull(academyId, "academyId cannot be null");
         timezone = normalizeTimezone(timezone);
-        openingHours = normalizeOpeningHours(openingHours);
-        holidays = normalizeHolidays(holidays);
+//        openingHours = normalizeOpeningHours(openingHours);
+//        holidays = normalizeHolidays(holidays);
         Objects.requireNonNull(updatedAt, "updatedAt cannot be null");
     }
 
@@ -31,10 +31,16 @@ public record AcademySettings(
             academyId,
             phone,
             timezone,
-            DEFAULT_OPENING_HOURS,
-            DEFAULT_HOLIDAYS,
             Instant.now()
         );
+//        return new AcademySettings(
+//                academyId,
+//                phone,
+//                timezone,
+//                DEFAULT_OPENING_HOURS,
+//                DEFAULT_HOLIDAYS,
+//                Instant.now()
+//        );
     }
 
     private static String normalizeTimezone(final String timezone) {

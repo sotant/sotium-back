@@ -41,7 +41,7 @@ public class RegisterAcademyService implements RegisterAcademyUseCase {
             final CreateAcademyResult academyResult = academyRegistrationPort.createAcademy(
                 new CreateAcademyCommand(
                     safeCommand.academyName(),
-                    safeCommand.academyEmail(),
+                    safeCommand.ownerEmail(),
                     safeCommand.phone(),
                     safeCommand.timezone()
                 )
@@ -66,7 +66,6 @@ public class RegisterAcademyService implements RegisterAcademyUseCase {
     private RegisterAcademyCommand validate(final RegisterAcademyCommand command) {
         Objects.requireNonNull(command, "registerAcademyCommand must not be null");
         requireNonBlank(command.academyName(), "academyName");
-        requireNonBlank(command.academyEmail(), "academyEmail");
         requireNonBlank(command.ownerSub(), "ownerSub");
         requireNonBlank(command.ownerEmail(), "ownerEmail");
 
@@ -76,7 +75,6 @@ public class RegisterAcademyService implements RegisterAcademyUseCase {
 
         return new RegisterAcademyCommand(
             command.academyName(),
-            command.academyEmail(),
             command.phone(),
             timezone,
             command.ownerSub(),
