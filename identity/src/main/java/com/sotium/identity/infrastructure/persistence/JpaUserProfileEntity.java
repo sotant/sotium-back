@@ -38,7 +38,7 @@ public class JpaUserProfileEntity {
     @Column(name = "bio")
     private String bio;
 
-    @Column(name = "created_at", insertable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, insertable = false, updatable = false)
     private OffsetDateTime createdAt;
 
     @Column(name = "updated_at", insertable = false, updatable = false)
